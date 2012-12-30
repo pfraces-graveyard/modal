@@ -1,0 +1,26 @@
+{
+  "name": "domino",
+  "version": "0.1",
+  "description": "DOM selector",
+  "main": "./lib/index.js",
+  "dependencies": {
+    "dal": "*"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pfraces/domino.git"
+  },
+  "keywords": [
+    "domino",
+    "dal",
+    "dom",
+    "jquery",
+    "zepto",
+    "selector"
+  ],
+  "author": "Pau Fracés",
+  "license": "MIT"
+}
