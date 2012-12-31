@@ -1,6 +1,6 @@
 {
-  "name": "domino",
-  "version": "0.1.0",
+  "name": "modal",
+  "version": "0.1.1",
   "description": "DOM selector",
   "main": "./lib/index.js",
   "dependencies": {
@@ -14,7 +14,7 @@
     "url": "https://github.com/pfraces/domino.git"
   },
   "keywords": [
-    "domino",
+    "modal",
     "dal",
     "dom",
     "jquery",
