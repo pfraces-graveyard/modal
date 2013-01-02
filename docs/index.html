@@ -41,7 +41,7 @@ elements</p>             </td>             <td class="code">               <div 
           <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">el</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">dal</span><span class="p">(</span><span class="nx">el</span><span class="p">);</span> <span class="p">});</span>
         <span class="k">break</span><span class="p">;</span>
       <span class="k">case</span> <span class="nx">K_SELECTOR_HTML</span><span class="o">:</span>
-        <span class="nx">arr</span> <span class="o">=</span> <span class="nx">dal</span><span class="p">().</span><span class="nx">html</span><span class="p">(</span><span class="nx">selector</span><span class="p">).</span><span class="nx">children</span><span class="p">()</span>
+        <span class="nx">arr</span> <span class="o">=</span> <span class="nx">dal</span><span class="p">().</span><span class="nx">html</span><span class="p">(</span><span class="nx">selector</span><span class="p">).</span><span class="nx">getChildren</span><span class="p">()</span>
           <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">el</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">dal</span><span class="p">(</span><span class="nx">el</span><span class="p">);</span> <span class="p">});</span>
         <span class="k">break</span><span class="p">;</span>
     <span class="p">}</span>
