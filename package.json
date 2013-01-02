@@ -1,9 +1,10 @@
 {
   "name": "modal",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "DOM selector",
   "main": "./lib/index.js",
   "dependencies": {
+    "jslib": "*",
     "dal": "*"
   },
   "scripts": {
@@ -14,8 +15,6 @@
     "url": "https://github.com/pfraces/modal.git"
   },
   "keywords": [
-    "modal",
-    "dal",
     "dom",
     "jquery",
     "zepto",
