@@ -12,17 +12,22 @@ elements</p>             </td>             <td class="code">               <div 
   <span class="kd">function</span> <span class="nx">selectorType</span><span class="p">(</span><span class="nx">selector</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">selector</span><span class="p">)</span> <span class="k">return</span> <span class="nx">K_SELECTOR_NULL</span><span class="p">;</span>
     <span class="k">if</span> <span class="p">(</span><span class="nx">jslib</span><span class="p">(</span><span class="nx">selector</span><span class="p">).</span><span class="nx">isString</span><span class="p">())</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span><span class="sr">/^[#]\w$]/</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">selector</span><span class="p">))</span> <span class="k">return</span> <span class="nx">K_SELECTOR_ID</span><span class="p">;</span>
-      <span class="k">if</span> <span class="p">(</span><span class="sr">/^[.]\w$/</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">selector</span><span class="p">))</span> <span class="k">return</span> <span class="nx">K_SELECTOR_CLASS</span><span class="p">;</span>
-      <span class="k">if</span> <span class="p">(</span><span class="sr">/^\w$/</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">selector</span><span class="p">))</span> <span class="k">return</span> <span class="nx">K_SELECTOR_TAG</span><span class="p">;</span>
+      <span class="k">if</span> <span class="p">(</span><span class="sr">/^[#][\w]+$]/</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">selector</span><span class="p">))</span> <span class="k">return</span> <span class="nx">K_SELECTOR_ID</span><span class="p">;</span>
+      <span class="k">if</span> <span class="p">(</span><span class="sr">/^[.][\w]+$/</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">selector</span><span class="p">))</span> <span class="k">return</span> <span class="nx">K_SELECTOR_CLASS</span><span class="p">;</span>
+      <span class="k">if</span> <span class="p">(</span><span class="sr">/^[\w]+$/</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">selector</span><span class="p">))</span> <span class="k">return</span> <span class="nx">K_SELECTOR_TAG</span><span class="p">;</span>
       <span class="k">return</span> <span class="nx">K_SELECTOR_HTML</span><span class="p">;</span>
     <span class="p">}</span>
     <span class="k">return</span> <span class="nx">K_SELECTOR_ELEMENT</span><span class="p">;</span>
   <span class="p">}</span>
 
   <span class="kd">function</span> <span class="nx">getNodes</span> <span class="p">()</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">arr</span> <span class="o">=</span> <span class="p">[];</span>
-    <span class="k">switch</span> <span class="p">(</span><span class="nx">selectorType</span><span class="p">(</span><span class="nx">selector</span><span class="p">))</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">selType</span> <span class="o">=</span> <span class="nx">selectorType</span><span class="p">(</span><span class="nx">selector</span><span class="p">)</span>
+      <span class="p">,</span> <span class="nx">arr</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nx">selType</span> <span class="o">===</span> <span class="nx">K_SELECTOR_ID</span> <span class="o">||</span> <span class="nx">selType</span> <span class="o">===</span> <span class="nx">K_SELECTOR_CLASS</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">selector</span> <span class="o">=</span> <span class="nx">selector</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">switch</span> <span class="p">(</span><span class="nx">selType</span><span class="p">)</span> <span class="p">{</span>
       <span class="k">case</span> <span class="nx">K_SELECTOR_NULL</span><span class="o">:</span>
         <span class="nx">arr</span> <span class="o">=</span> <span class="p">[].</span><span class="nx">concat</span><span class="p">(</span><span class="nx">dal</span><span class="p">());</span>
         <span class="k">break</span><span class="p">;</span>
@@ -31,16 +36,31 @@ elements</p>             </td>             <td class="code">               <div 
         <span class="nx">arr</span> <span class="o">=</span> <span class="p">[].</span><span class="nx">concat</span><span class="p">(</span><span class="nx">dal</span><span class="p">(</span><span class="nx">selector</span><span class="p">));</span>
         <span class="k">break</span><span class="p">;</span>
       <span class="k">case</span> <span class="nx">K_SELECTOR_CLASS</span><span class="o">:</span>
-        <span class="nx">arr</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByClassName</span><span class="p">(</span><span class="nx">selector</span><span class="p">)</span>
-          <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">el</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">dal</span><span class="p">(</span><span class="nx">el</span><span class="p">);</span> <span class="p">});</span>
+        <span class="nx">arr</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByClassName</span><span class="p">(</span><span class="nx">selector</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">arr</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">arr</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">map</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">arr</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">el</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">dal</span><span class="p">(</span><span class="nx">el</span><span class="p">);</span>
+          <span class="p">});</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="nx">arr</span> <span class="o">=</span> <span class="p">[].</span><span class="nx">concat</span><span class="p">(</span><span class="nx">dal</span><span class="p">());</span>
         <span class="k">break</span><span class="p">;</span>
       <span class="k">case</span> <span class="nx">K_SELECTOR_TAG</span><span class="o">:</span>
-        <span class="nx">arr</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="nx">selector</span><span class="p">)</span>
-          <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">el</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">dal</span><span class="p">(</span><span class="nx">el</span><span class="p">);</span> <span class="p">});</span>
+        <span class="nx">arr</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="nx">selector</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">arr</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">arr</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">map</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">arr</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">el</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">dal</span><span class="p">(</span><span class="nx">el</span><span class="p">);</span>
+          <span class="p">});</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="nx">arr</span> <span class="o">=</span> <span class="p">[].</span><span class="nx">concat</span><span class="p">(</span><span class="nx">dal</span><span class="p">());</span>
         <span class="k">break</span><span class="p">;</span>
       <span class="k">case</span> <span class="nx">K_SELECTOR_HTML</span><span class="o">:</span>
-        <span class="nx">arr</span> <span class="o">=</span> <span class="nx">dal</span><span class="p">().</span><span class="nx">html</span><span class="p">(</span><span class="nx">selector</span><span class="p">).</span><span class="nx">getChildren</span><span class="p">()</span>
-          <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">el</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">dal</span><span class="p">(</span><span class="nx">el</span><span class="p">);</span> <span class="p">});</span>
+        <span class="nx">arr</span> <span class="o">=</span> <span class="nx">dal</span><span class="p">().</span><span class="nx">html</span><span class="p">(</span><span class="nx">selector</span><span class="p">).</span><span class="nx">getChildren</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">arr</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">arr</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">map</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">arr</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">el</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">dal</span><span class="p">(</span><span class="nx">el</span><span class="p">);</span>
+          <span class="p">});</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="nx">arr</span> <span class="o">=</span> <span class="p">[].</span><span class="nx">concat</span><span class="p">(</span><span class="nx">dal</span><span class="p">());</span>
         <span class="k">break</span><span class="p">;</span>
     <span class="p">}</span>
     <span class="k">return</span> <span class="nx">arr</span><span class="p">;</span>
@@ -67,16 +87,16 @@ elements</p>             </td>             <td class="code">               <div 
     <span class="k">return</span> <span class="nx">self</span><span class="p">;</span>
   <span class="p">}</span>
 
-  <span class="nx">self</span><span class="p">.</span><span class="nx">del</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-    <span class="nx">self</span><span class="p">.</span><span class="nx">nodes</span><span class="p">[</span><span class="nx">self</span><span class="p">.</span><span class="nx">nodes</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">].</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">el</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">el</span><span class="p">.</span><span class="nx">detach</span><span class="p">();</span>
-    <span class="p">});</span>
-    <span class="nx">self</span><span class="p">.</span><span class="nx">nodes</span><span class="p">.</span><span class="nx">pop</span><span class="p">();</span>
+  <span class="nx">self</span><span class="p">.</span><span class="nx">forEach</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">self</span><span class="p">.</span><span class="nx">nodes</span><span class="p">[</span><span class="nx">self</span><span class="p">.</span><span class="nx">nodes</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">].</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">callback</span><span class="p">);</span>
     <span class="k">return</span> <span class="nx">self</span><span class="p">;</span>
   <span class="p">}</span>
 
-  <span class="nx">self</span><span class="p">.</span><span class="nx">forEach</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">self</span><span class="p">.</span><span class="nx">nodes</span><span class="p">[</span><span class="nx">self</span><span class="p">.</span><span class="nx">nodes</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">].</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">callback</span><span class="p">);</span>
+  <span class="nx">self</span><span class="p">.</span><span class="nx">del</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="nx">self</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">el</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">el</span><span class="p">.</span><span class="nx">detach</span><span class="p">();</span>
+    <span class="p">});</span>
+    <span class="nx">self</span><span class="p">.</span><span class="nx">nodes</span><span class="p">.</span><span class="nx">pop</span><span class="p">();</span>
     <span class="k">return</span> <span class="nx">self</span><span class="p">;</span>
   <span class="p">}</span>
 
